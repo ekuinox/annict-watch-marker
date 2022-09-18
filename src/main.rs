@@ -1,6 +1,6 @@
 mod animetick_exported_data;
 
-use animetick_exported_data::read_animations_by_directory;
+use crate::animetick_exported_data::{read_animations_by_directory, read_animations_by_file};
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
@@ -13,7 +13,11 @@ struct App {
 #[tokio::main]
 async fn main() -> Result<()> {
     let app = App::try_parse()?;
-    let animations = read_animations_by_directory(&app.directory)?;
+    let animations = if app.directory.ends_with(".json") {
+        read_animations_by_file(&app.directory)?
+    } else {
+        read_animations_by_directory(&app.directory)?
+    };
     dbg!(&animations);
 
     Ok(())
