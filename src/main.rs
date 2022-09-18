@@ -13,7 +13,7 @@ struct App {
 #[tokio::main]
 async fn main() -> Result<()> {
     let app = App::try_parse()?;
-    let animations = if app.directory.ends_with(".json") {
+    let animations = if app.directory.is_file() {
         read_animations_by_file(&app.directory)?
     } else {
         read_animations_by_directory(&app.directory)?
