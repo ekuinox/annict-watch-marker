@@ -13,7 +13,7 @@ pub struct Episode(pub String, pub Option<bool>);
 #[derive(Deserialize, Debug)]
 pub struct Animation {
     pub name: String,
-    pub episodes: Vec<serde_json::Value>,
+    pub episodes: Vec<Episode>,
 }
 
 pub type AnimetickExportedDataAnimations = Vec<Animation>;
