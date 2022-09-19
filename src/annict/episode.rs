@@ -19,16 +19,8 @@ pub struct GetEpisodesResponse {
 #[serde(rename_all = "camelCase")]
 pub struct Episode {
     pub id: i64,
-    pub number: f64,
-    #[serde(rename = "number_text")]
-    pub number_text: String,
-    #[serde(rename = "sort_number")]
-    pub sort_number: i64,
+    pub number: Option<f64>,
     pub title: String,
-    #[serde(rename = "records_count")]
-    pub records_count: i64,
-    #[serde(rename = "record_comments_count")]
-    pub record_comments_count: i64,
 }
 
 impl AnnictClient {

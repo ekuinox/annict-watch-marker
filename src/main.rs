@@ -102,9 +102,11 @@ async fn exec_animation(
         let mut episodes = animetick_episodes
             .into_iter()
             .flat_map(|(animetick_number, _, watched)| {
-                let episode = episodes
-                    .iter()
-                    .find(|(number, _, _)| *animetick_number == *number);
+                let episode = episodes.iter().find(|(number, _, _)| {
+                    number
+                        .map(|number| *animetick_number == number)
+                        .unwrap_or(false)
+                });
                 episode.map(|(number, title, id)| (number, title, id, watched))
             })
             .collect::<Vec<_>>();
@@ -118,9 +120,16 @@ async fn exec_animation(
             watched.and_then(|watched| if watched { id.into() } else { None })
         })
         .collect::<Vec<_>>();
-    let results = futures::future::join_all(episodes.into_iter().map(|episode_id| async {
-        std::thread::sleep(std::time::Duration::from_millis(1));
-        client.record(*episode_id).await
+    let results = futures::future::join_all(episodes.into_iter().map(|episode_id| {
+        let episode_id = *episode_id;
+        async move {
+            std::thread::sleep(std::time::Duration::from_millis(1));
+            let r = client.record(episode_id).await;
+            if let Err(e) = &r {
+                eprintln!("--> {episode_id}, {e}");
+            }
+            r
+        }
     }))
     .await;
 

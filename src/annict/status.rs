@@ -1,6 +1,5 @@
-use anyhow::{Result, ensure};
 use super::AnnictClient;
-
+use anyhow::{ensure, Result};
 
 impl AnnictClient {
     pub async fn status(&self, work_id: i64, kind: &str) -> Result<()> {
