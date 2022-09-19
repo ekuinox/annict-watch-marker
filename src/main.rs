@@ -81,6 +81,7 @@ async fn exec_animation(
         Some(w) => w,
         None => bail!("-> cannot found on annict"),
     };
+    println!("-> url: https://annict.com/works/{}", work.id);
 
     let status_kind = if animetick_episodes
         .iter()
